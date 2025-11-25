@@ -7,12 +7,16 @@ const app = express();
 app.get("/math/circle/:r", (req, res) => {
   const radius = parseFloat(req.params.r);
 
+  if (isNaN(radius) || radius <= 0) {
+    return res.status(400).json({ error: "Invalid radius" });
+  }
+
   const area = Math.PI * radius * radius;
   const circumference = 2 * Math.PI * radius;
 
   const result = {
     area: area.toFixed(2),
-    circumference: circumference.toFixed(2)
+    circumference: circumference.toFixed(2),
   };
 
   res.json(result);
