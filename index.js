@@ -32,7 +32,7 @@ app.get("/math/rectangle/:width/:height", (req, res) => {
   if (isNaN(h) || h <= 0) {
     return res.status(400).json({ error: "Invalid height" });
   }
-  
+
   let area = w * h;
   let circumference = 2 * (w + h);
 
@@ -44,7 +44,6 @@ app.get("/math/rectangle/:width/:height", (req, res) => {
     circumference = Number(circumference.toFixed(2));
   }
 
-  
   const result = {
     area: area,
     circumference: circumference,
@@ -53,7 +52,30 @@ app.get("/math/rectangle/:width/:height", (req, res) => {
   res.json(result);
 });
 
-//TODO3
+app.get("/math/power/:base/:exponent", (req, res) => {
+  const base = parseFloat(req.params.base);
+  const exponent = parseFloat(req.params.exponent);
+
+  if (isNaN(base) || isNaN(exponent)) {
+    return res.status(400).json({ error: "Invalid input" });
+  }
+
+  const result = Math.pow(base, exponent);
+
+  const includeRoot = req.query.root === "true";
+
+  if (includeRoot) {
+    const root = Math.sqrt(base);
+    return res.json({
+      result: result,
+      root: root,
+    });
+  }
+
+  res.json({
+    result: result,
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
