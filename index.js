@@ -23,18 +23,31 @@ app.get("/math/circle/:r", (req, res) => {
 });
 
 app.get("/math/rectangle/:width/:height", (req, res) => {
-  const radius = parseFloat(req.params.r);
-
-  if (isNaN(radius) || radius <= 0) {
-    return res.status(400).json({ error: "Invalid radius" });
+  const w = parseFloat(req.params.width);
+  const h = parseFloat(req.params.height);
+  if (isNaN(w) || w <= 0) {
+    return res.status(400).json({ error: "Invalid width" });
   }
 
-  const area = Math.PI * radius * radius;
-  const circumference = 2 * Math.PI * radius;
+  if (isNaN(h) || h <= 0) {
+    return res.status(400).json({ error: "Invalid height" });
+  }
+  
+  let area = w * h;
+  let circumference = 2 * (w + h);
 
+  if (!Number.isInteger(area)) {
+    area = Number(area.toFixed(2));
+  }
+
+  if (!Number.isInteger(circumference)) {
+    circumference = Number(circumference.toFixed(2));
+  }
+
+  
   const result = {
-    area: area.toFixed(2),
-    circumference: circumference.toFixed(2),
+    area: area,
+    circumference: circumference,
   };
 
   res.json(result);
