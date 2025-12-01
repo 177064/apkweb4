@@ -128,7 +128,7 @@ app.get("/jokebook/joke/:category", (req, res) => {
     if (!categories.includes(category)) {
       return res
         .status(400)
-        .json({ error: `No jokes for category '${category}'.` });
+        .json({ error: `No jokes for category fewfew'${category}'.` });
     }
     //const joke = category[Math.floor(Math.random() * category.length)]["joke"];
     //const response = category[Math.floor(Math.random() * category.length)]["response"];
