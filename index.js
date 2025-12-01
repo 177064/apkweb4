@@ -128,7 +128,7 @@ app.get("/jokebook/joke/:category", (req, res) => {
     if (!categories.includes(category)) {
       return res
         .status(400)
-        .json({ error: `No jokes for category fewfew'${category}'.` });
+        .json({ error: `No jokes for category '${category}'.` });
     }
     //const joke = category[Math.floor(Math.random() * category.length)]["joke"];
     //const response = category[Math.floor(Math.random() * category.length)]["response"];
@@ -167,6 +167,43 @@ app.get("/jokebook/random", (req, res) => {
     joke: jokeArray[random].joke,
     response: jokeArray[random].response,
   });
+});
+
+// Endpoint for adding new joke to a specific category
+app.post("/jokebook/joke/:category", express.json(), (req, res) => {
+  try {
+    const category = req.params.category;
+    const { joke, response } = req.body;
+
+    // Validate the request body
+    if (!joke || !response) {
+      return res
+        .status(400)
+        .json({ error: "Both 'joke' and 'response' are required" });
+    }
+
+    // Check if the category exists
+    if (!categories.includes(category)) {
+      return res
+        .status(400)
+        .json({ error: `No jokes for category '${category}'` });
+    }
+
+    // Add the new joke to the correct category
+    const jokeArray = jokes[category];
+    jokeArray.push({ joke, response });
+
+    // Send success response
+    res.status(201).json({
+      message: "Joke added successfully",
+      category: category,
+      joke: joke,
+      response: response,
+    });
+  } catch (err) {
+    console.error("Error in /jokebook/joke/:category:", err);
+    res.status(500).json({ error: "Internal server error." });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
