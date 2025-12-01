@@ -175,25 +175,21 @@ app.post("/jokebook/joke/:category", express.json(), (req, res) => {
     const category = req.params.category;
     const { joke, response } = req.body;
 
-    // Validate the request body
     if (!joke || !response) {
       return res
         .status(400)
         .json({ error: "Both 'joke' and 'response' are required" });
     }
 
-    // Check if the category exists
     if (!categories.includes(category)) {
       return res
         .status(400)
-        .json({ error: `No jokes for category '${category}'` });
+        .json({ error: `no jokes for category '${category}'` });
     }
 
-    // Add the new joke to the correct category
     const jokeArray = jokes[category];
     jokeArray.push({ joke, response });
 
-    // Send success response
     res.status(201).json({
       message: "Joke added successfully",
       category: category,
